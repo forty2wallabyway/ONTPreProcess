@@ -1,3 +1,4 @@
+name: ONTPreProcess
 channels:
   - conda-forge
   - bioconda
