@@ -8,9 +8,10 @@ if not SAMPLES:
 
 rule all:
     input:
-        expand("results/{sample}.final.fastq.gz", sample=SAMPLES)
+        expand("results/{sample}.final.fastq.gz", sample=SAMPLES),
+        expand("reports/{sample}.report.txt", sample=SAMPLES)
 
-rule nanoq:
+rule filter:
     input:
         "data/{sample}.fastq.gz"
     output:
@@ -18,7 +19,7 @@ rule nanoq:
     shell:
         "nanoq -i {input} -o {output} --min-len 500 --min-qual 12"
 
-rule seqtk:
+rule subsample:
     input:
         temp("work/nanoq/{sample}.filtered.fastq.gz")
     output:
@@ -26,7 +27,7 @@ rule seqtk:
     shell:
         "seqtk sample -s 11 {input} 60000 | gzip -c > {output}"
 
-rule porechop:
+rule trim:
     input:
         temp("work/seqtk/{sample}.filtered.subsampled.fastq.gz")
     output:
@@ -40,4 +41,4 @@ rule report:
     output:
         "reports/{sample}.report.txt"
     shell:
-        "nanoq {input} -s -r -vvv > {output}"
+        "nanoq -i {input} -s -vvv > {output}"
