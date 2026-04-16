@@ -1,34 +1,43 @@
 import os
+import glob
 
 SAMPLES = glob_wildcards("data/{sample}.fastq.gz").sample
 
 if not SAMPLES:
-    raise ValueError("No input FASTQ files found in data/. Place your *.fastq.gz files in the data/ directory, please!")
+    raise ValueError("No input files found. Place your *.fastq.gz files in the data/ directory, please!")
 
 rule all:
     input:
         expand("results/{sample}.final.fastq.gz", sample=SAMPLES)
 
-rule porechop:
+rule nanoq:
     input:
         "data/{sample}.fastq.gz"
     output:
-        temp("work/porechop/{sample}.trimmed.fastq.gz")
+        temp("work/nanoq/{sample}.filtered.fastq.gz")
     shell:
-        "porechop -i {input} -o {output} --threads {threads}"
-
-rule nanoq:
-    input:
-        trimmed="work/porechop/{sample}.trimmed.fastq.gz"
-    output:
-        filtered=temp("work/nanoq/{sample}.filtered.fastq.gz")
-    shell:
-        "nanoq -i {input.trimmed} -o {output.filtered} --min-len 500 --min-qual 10"
+        "nanoq -i {input} -o {output} --min-len 500 --min-qual 12"
 
 rule seqtk:
     input:
-        "work/nanoq/{sample}.filtered.fastq.gz"
+        temp("work/nanoq/{sample}.filtered.fastq.gz")
+    output:
+        temp("work/seqtk/{sample}.filtered.subsampled.fastq.gz")
+    shell:
+        "seqtk sample -s 11 {input} 60000 | gzip -c > {output}"
+
+rule porechop:
+    input:
+        temp("work/seqtk/{sample}.filtered.subsampled.fastq.gz")
     output:
         "results/{sample}.final.fastq.gz"
     shell:
-        "seqtk sample -s 11 {input} 60000 | gzip -c > {output}"
+        "porechop -i {input} -o {output} --threads 4"
+
+rule report:
+    input:
+        "results/{sample}.final.fastq.gz"
+    output:
+        "reports/{sample}.report.txt"
+    shell:
+        "nanoq {input} -s -r -vvv > {output}"

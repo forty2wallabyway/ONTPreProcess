@@ -1,2 +1,2 @@
 # ONTPreProcess
-A simple, but modular workflow for preprocessing of ONT (Nanopore) sequencing raw reads.
+A simple Snakemake workflow for preprocessing of ONT (Nanopore) raw reads.
