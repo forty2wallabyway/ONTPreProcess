@@ -7,7 +7,7 @@ if not SAMPLES:
 
 rule all:
     input:
-        expand("results/{sample}.final.fasta.gz", sample=SAMPLES)
+        expand("results/{sample}.final.fastq.gz", sample=SAMPLES)
 
 rule porechop:
     input:
