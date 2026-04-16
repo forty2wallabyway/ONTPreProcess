@@ -5,6 +5,7 @@ channels:
   - defaults
 
 dependencies:
+  - snakemake
   - nanoq
   - porechop
   - seqtk
