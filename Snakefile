@@ -29,6 +29,6 @@ rule seqtk:
     input:
         "work/nanoq/{sample}.filtered.fastq.gz"
     output:
-        "results/{sample}.final.fasta.gz"
+        "results/{sample}.final.fastq.gz"
     shell:
         "seqtk sample -s 11 {input} 60000 | gzip -c > {output}"
