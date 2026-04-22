@@ -6,6 +6,8 @@ channels:
 
 dependencies:
   - snakemake
+  - minimap2
+  - samtools
   - nanoq
   - porechop
   - seqtk
