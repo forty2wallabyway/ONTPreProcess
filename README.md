@@ -2,13 +2,13 @@
 ### A workflow for preprocessing of ONT (Nanopore) raw reads.
 
 ### Currently designed to: 
-  a) Quality filter using nanoq \
-  b) Remove non-target (e.g., host) reads using mimimap2 \
-  b) Subsample using seqtk \
-  c) Trim adapters using porechop \
-  d) Generate a summary report using nanoq
+  a) Quality filter using [nanoq](https://github.com/esteinig/nanoq) \
+  b) Remove host reads using [mimimap2](https://github.com/lh3/minimap2) \
+  b) Subsample using [seqtk](https://github.com/lh3/seqtk) \
+  c) Trim adapters using [porechop](https://github.com/rrwick/porechop) \
+  d) Generate a summary report using [nanoq](https://github.com/esteinig/nanoq)
 
-Minimum read length, quality, and subsampling depth are currently set to 300bp, 12, and 60,000, respectively. Values can be adjusted directly in the Snakefile for variable processing. For the removal of non-target reads, the workflow assumes a local directory `refs` with a `refs/host.fasta` file present.
+Minimum read length, quality, and subsampling depth are currently set to 300bp, Q=12, and 60,000 reads, respectively. Values can be adjusted directly in the Snakefile for variable processing. For the removal of host reads, the workflow assumes a local directory `refs` with a `refs/host.fasta` file present.
 
 ### Suggested usage: 
 1. Clone repo to desired workspace. 
